@@ -21,7 +21,7 @@ services:
         constraints:
           - node.role == manager
 
-  oracle-xe:
+  oracle:
     image: oracle-xe:21.3.0
     build: 
       context: https://github.com/oracle/docker-images.git#main:OracleDatabase/SingleInstance/dockerfiles/21.3.0
