@@ -30,6 +30,11 @@ services:
       - "ORACLE_PWD=$ORACLE_PWD"
       - "ORACLE_CHARACTERSET=$ORACLE_CHARACTERSET"
     deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 1
+        window: 120s
       endpoint_mode: dnsrr
       placement:
         constraints:
