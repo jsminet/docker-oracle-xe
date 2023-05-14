@@ -13,13 +13,6 @@ services:
       # So that Traefik can listen to the Docker events
       - /var/run/docker.sock:/var/run/docker.sock
       - ./app/traefik/conf/traefik.yml:/etc/traefik/traefik.yml
-    deploy:
-      update_config:
-        delay: 10s
-        order: start-first
-      placement:
-        constraints:
-          - node.role == manager
 
   oracle:
     image: oracle-xe:21.3.0
@@ -29,25 +22,15 @@ services:
     environment: 
       - "ORACLE_PWD=$ORACLE_PWD"
       - "ORACLE_CHARACTERSET=$ORACLE_CHARACTERSET"
-    deploy:
-      restart_policy:
-        condition: on-failure
-        delay: 5s
-        max_attempts: 1
-        window: 120s
-      endpoint_mode: dnsrr
-      placement:
-        constraints:
-          - node.role == manager
-      labels:
-          - "traefik.enable=true"
-          - "traefik.http.routers.oracle.rule=Host(`$ORACLE_XE_DNS`)"
-          - "traefik.http.routers.oracle.entrypoints=web"
-          - "traefik.http.routers.oracle.service=oracle"
-          - "traefik.http.services.oracle.loadbalancer.server.port=$ORACLE_XE_HTTP_PORT"
-          - "traefik.tcp.routers.oracle.rule=HostSNI(`*`)"
-          - "traefik.tcp.routers.oracle.entrypoints=oracle"
-          - "traefik.tcp.services.oracle.loadbalancer.server.port=$ORACLE_XE_RPC_PORT"
+    labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.oracle.rule=Host(`$ORACLE_XE_DNS`)"
+        - "traefik.http.routers.oracle.entrypoints=web"
+        - "traefik.http.routers.oracle.service=oracle"
+        - "traefik.http.services.oracle.loadbalancer.server.port=$ORACLE_XE_HTTP_PORT"
+        - "traefik.tcp.routers.oracle.rule=HostSNI(`*`)"
+        - "traefik.tcp.routers.oracle.entrypoints=oracle"
+        - "traefik.tcp.services.oracle.loadbalancer.server.port=$ORACLE_XE_RPC_PORT"
     volumes:
       - "oradata:/opt/oracle/oradata"
       - "./db/oracle/scripts:/docker-entrypoint-initdb.d/scripts"
