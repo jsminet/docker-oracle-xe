@@ -27,6 +27,7 @@ services:
         - "traefik.http.routers.oracle.rule=Host(`$ORACLE_XE_DNS`)"
         - "traefik.http.routers.oracle.entrypoints=web"
         - "traefik.http.routers.oracle.service=oracle"
+        - "traefik.http.services.oracle.loadbalancer.server.scheme=https"
         - "traefik.http.services.oracle.loadbalancer.server.port=$ORACLE_XE_HTTP_PORT"
         - "traefik.tcp.routers.oracle.rule=HostSNI(`*`)"
         - "traefik.tcp.routers.oracle.entrypoints=oracle"

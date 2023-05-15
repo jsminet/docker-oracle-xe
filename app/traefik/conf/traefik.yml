@@ -29,3 +29,9 @@ entryPoints:
     address: ":443"
   oracle:
     address: ":1521"
+
+################################################################
+# Auto signed certificate
+################################################################
+serversTransport:
+  insecureSkipVerify: true
