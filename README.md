@@ -50,18 +50,18 @@ Access the database using a SQL client like [DBeaver](https://dbeaver.io/), pay 
 ### Oracle 21.3.0 Express Edition
 |User|Password|Host|Port|SID|
 |---|---|---|---|---|
-|sys as sysdba|secret|oraclexe.localtest.me|1521|XE|
-|system|secret|oraclexe.localtest.me|1521|XE|
-|pdbadmin|secret|oraclexe.localtest.me|1521|XEPDB1|
-|TEST|test|oraclexe.localtest.me|1521|XEPDB1|
+|sys as sysdba|secret|oracle.localtest.me|1521|XE|
+|system|secret|oracle.localtest.me|1521|XE|
+|pdbadmin|secret|oracle.localtest.me|1521|XEPDB1|
+|TEST|test|oracle.localtest.me|1521|XEPDB1|
 
 ### Oracle 23.3.6 Free Edition
 |User|Password|Host|Port|SID|
 |---|---|---|---|---|
-|sys as sysdba|secret|oraclexe.localtest.me|1521|FREE|
-|system|secret|oraclexe.localtest.me|1521|FREE|
-|pdbadmin|secret|oraclexe.localtest.me|1521|FREEPDB1|
-|TEST|test|oraclexe.localtest.me|1521|FREEPDB1|
+|sys as sysdba|secret|oracle.localtest.me|1521|FREE|
+|system|secret|oracle.localtest.me|1521|FREE|
+|pdbadmin|secret|oracle.localtest.me|1521|FREEPDB1|
+|TEST|test|oracle.localtest.me|1521|FREEPDB1|
 
 ## 🍰 Contributing    
 Contributions are what make the open source community such an amazing place to be learn, inspire, and create. 
