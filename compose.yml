@@ -1,0 +1,70 @@
+services:
+  traefik:
+    image: traefik:3.3.2
+    ports:
+      # Exposes port 80 for incomming web requests
+      - 80:80
+      # The Web UI port http://0.0.0.0:8080 (enabled by --api.insecure=true)
+      - 8080:8080
+      - 1521:1521
+    volumes:
+      # So that Traefik can listen to the Docker events
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./app/traefik/conf/traefik.yml:/etc/traefik/traefik.yml
+
+  oracle-free:
+    image: oracle-free:23.6.0
+    profiles:
+      - free
+    build: 
+      context: https://github.com/oracle/docker-images.git#main:OracleDatabase/SingleInstance/dockerfiles/23.6.0
+      dockerfile: Containerfile.free
+    hostname: oracle-free
+    environment: 
+      - ORACLE_PWD
+      - ORACLE_CHARACTERSET
+      - ENABLE_ARCHIVELOG
+      - ENABLE_FORCE_LOGGING
+    labels:
+        - traefik.enable=true
+        - traefik.tcp.routers.oracle-free.rule=HostSNI(`*`)
+        - traefik.tcp.routers.oracle-free.entrypoints=oracle
+        - traefik.tcp.services.oracle-free.loadbalancer.server.port=$ORACLE_RPC_PORT
+    volumes:
+      - oracle-data-free:/opt/oracle/oradata
+      # Volume with custom scripts to be run after database setup
+      - ./db/oracle/scripts/setup:/opt/oracle/scripts/setup
+      # Volume with custom scripts to be run after database startup
+      - ./db/oracle/scripts/startup:/opt/oracle/scripts/startup
+
+  oracle-xe:
+    image: oracle-xe:21.3.0
+    hostname: oracle-xe
+    profiles:
+      - xe
+    build: 
+      context: https://github.com/oracle/docker-images.git#main:OracleDatabase/SingleInstance/dockerfiles/21.3.0
+      dockerfile: Dockerfile.xe
+    environment:
+      - ORACLE_PWD
+      - ORACLE_CHARACTERSET
+    labels:
+        - traefik.enable=true
+        - traefik.http.routers.oracle-xe.rule=Host(`$ORACLE_DNS`)
+        - traefik.http.routers.oracle-xe.entrypoints=web
+        - traefik.http.routers.oracle-xe.service=oracle-xe
+        - traefik.http.services.oracle-xe.loadbalancer.server.scheme=https
+        - traefik.http.services.oracle-xe.loadbalancer.server.port=$ORACLE_HTTP_PORT
+        - traefik.tcp.routers.oracle-xe.rule=HostSNI(`*`)
+        - traefik.tcp.routers.oracle-xe.entrypoints=oracle
+        - traefik.tcp.services.oracle-xe.loadbalancer.server.port=$ORACLE_RPC_PORT
+    volumes:
+      - oracle-data-xe:/opt/oracle/oradata
+      # Volume with custom scripts to be run after database setup
+      - ./db/oracle/scripts/setup:/opt/oracle/scripts/setup
+      # Volume with custom scripts to be run after database startup
+      - ./db/oracle/scripts/startup:/opt/oracle/scripts/startup
+
+volumes: 
+  oracle-data-free:
+  oracle-data-xe:
