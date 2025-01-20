@@ -1,4 +1,4 @@
-CONNECT TEST/test@//oracle-xe:1521/FREEPDB1;
+CONNECT TEST/test@//oracle-free:1521/FREEPDB1;
 -- Create starter set
 CREATE OR REPLACE VIEW VW_CUSTOMERS as (
     SELECT rownum as UNIQUE_ID,

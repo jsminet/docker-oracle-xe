@@ -61,9 +61,9 @@ services:
     volumes:
       - oracle-data-xe:/opt/oracle/oradata
       # Volume with custom scripts to be run after database setup
-      - ./db/oracle/scripts/setup:/opt/oracle/scripts/setup
+      #- ./db/oracle/scripts/setup:/opt/oracle/scripts/setup
       # Volume with custom scripts to be run after database startup
-      - ./db/oracle/scripts/startup:/opt/oracle/scripts/startup
+      #- ./db/oracle/scripts/startup:/opt/oracle/scripts/startup
 
 volumes: 
   oracle-data-free:
